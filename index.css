@@ -1,0 +1,21 @@
+body {
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+.parent {
+  display: flex;
+  height: 300px; /* Or whatever */
+}
+
+.child {
+  width: 33%; /* Or whatever */
+  height: 33%; /* Or whatever */
+  margin: auto; /* Magic! */
+  text-align: center;
+}
