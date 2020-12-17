@@ -17,29 +17,27 @@ async function insertURL(documentToInsert) {
   }
 }
 
+//asks db for particular document to see if it exists; returns obejct with array  all objects in db and count of objects in db
 async function queryDB(queryID) {
+  let result = { allDocs: "", count: Number };
   try {
     await client.connect();
     const database = client.db("url_shortener");
     const collection = database.collection("urls");
-    let result = await collection.findOne({
-      _id: 2,
-    });
-
-    console.log(result);
+    result.allDocs = await collection.find().toArray();
+    result.count = result.allDocs.length;
   } finally {
-    // Ensures that the client will close when you finish/error
     await client.close();
+    return result;
   }
-  return;
 }
 
 function shortenURL() {
   let slug = "";
   let finalURL = {
-    _id: 2,
-    fullURL: "i'm not",
-    shortenedURL: "gay",
+    _id: 1,
+    fullURL: "",
+    shortenedURL: "",
   };
   let possible = "ABCDEFGHIJKLMNOPQRTUVabcdefghijklmnopqrstuvwxys123456789";
   let baseURL = "cp.gg";
@@ -50,15 +48,6 @@ function shortenURL() {
   }
 
   shortURL = baseURL + "/" + slug;
+  finalURL.shortenedURL = shortURL;
   return finalURL;
 }
-
-function main() {
-  let finalURL = shortenURL();
-  console.log(finalURL);
-  insertURL(finalURL);
-  queryDB(1);
-  return;
-}
-
-main();
