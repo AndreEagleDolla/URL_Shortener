@@ -4,31 +4,23 @@ const uri = "mongodb://localhost:27017";
 
 const client = new MongoClient(uri);
 
+const exampleDoc = {
+  _id: 3,
+  fullURL: "i'm not",
+  shortenedURL: "gay",
+};
+
 async function insertURL(documentToInsert) {
   try {
     await client.connect();
     const database = client.db("url_shortener");
     const collection = database.collection("urls");
+    documentToInsert._id = (await collection.estimatedDocumentCount()) + 1;
     await collection.insertOne(documentToInsert);
     console.log("Inserted new document");
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
-  }
-}
-
-//asks db for particular document to see if it exists; returns obejct with array  all objects in db and count of objects in db
-async function queryDB(queryID) {
-  let result = { allDocs: "", count: Number };
-  try {
-    await client.connect();
-    const database = client.db("url_shortener");
-    const collection = database.collection("urls");
-    result.allDocs = await collection.find().toArray();
-    result.count = result.allDocs.length;
-  } finally {
-    await client.close();
-    return result;
   }
 }
 
@@ -51,3 +43,5 @@ function shortenURL() {
   finalURL.shortenedURL = shortURL;
   return finalURL;
 }
+
+insertURL(exampleDoc);
