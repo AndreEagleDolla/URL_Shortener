@@ -43,5 +43,3 @@ function shortenURL() {
   finalURL.shortenedURL = shortURL;
   return finalURL;
 }
-
-insertURL(exampleDoc);
